@@ -19,4 +19,9 @@ defmodule EnigmaTest do
     tuples = [{"a", 0}, {"b", 1}, {"c", 2}]
     assert %{"a" => 1, "b" => 2, "c" => 3} = Enigma.list_to_map(tuples)
   end
+
+  test "adjusts shifts to fit the length of the character set" do
+    shifts = [20, 75, 135, 27]
+    assert [20, 21, 0, 27] == Enigma.modulate_shifts(shifts)
+  end
 end

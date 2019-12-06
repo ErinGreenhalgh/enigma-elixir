@@ -40,35 +40,49 @@ defmodule Enigma do
     |> list_to_map()
   end
 
+  # memoize
+  def character_set_length do
+    character_set()
+    |> Map.keys()
+    |> Enum.count()
+  end
+
   def list_to_map(tuples) do
     acc = %{}
     Enum.reduce(tuples, acc, fn item, acc -> Map.put(acc, elem(item, 0), elem(item, 1) + 1) end)
   end
 
   def encrypt_message(message) do
+    # modulo shifts to fit the 27 character set
     # assign shifts to all characters in the message
-    #
+    # do lookup
     "keder ohulw"
   end
 
-  def calculate_shifts do
+  def modulate_shifts(shifts) do
+    Enum.map(shifts, &find_shift_number/1)
   end
 
-  def calculate_keys do
+  def find_shift_number(raw_shift) do
+    if raw_shift == character_set_length() do
+      raw_shift
+    else
+      rem(raw_shift, character_set_length())
+    end
   end
+
+  # def calculate_shifts do
+  #   [3, 27, 73, 20]
+  # end
+
+  # def calculate_keys do
+  # end
 
   def calculate_offset(date) do
     :math.pow(date, 2)
     |> round
     |> to_string()
     |> String.slice(-4..-1)
-
-    # %{
-    #   A: ,
-    #   B: ,
-    #   C: ,
-    #   D: ,
-    # }
   end
 end
 
