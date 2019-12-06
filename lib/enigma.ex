@@ -53,10 +53,15 @@ defmodule Enigma do
   end
 
   def encrypt_message(message) do
-    # modulo shifts to fit the 27 character set
     # assign shifts to all characters in the message
-    # do lookup
+    # modulo and do lookup
     "keder ohulw"
+  end
+
+  def get_shift_for_letter(message, letter_index, shifts) do
+    length = Enum.count(shifts)
+    shift_index = rem(letter_index, length)
+    {Enum.at(message, letter_index), Enum.at(shifts, shift_index)}
   end
 
   def modulate_shifts(shifts) do
