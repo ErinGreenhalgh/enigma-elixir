@@ -49,13 +49,32 @@ defmodule Enigma do
 
   def list_to_map(tuples) do
     acc = %{}
-    Enum.reduce(tuples, acc, fn item, acc -> Map.put(acc, elem(item, 0), elem(item, 1) + 1) end)
+    Enum.reduce(tuples, acc, fn item, acc -> Map.put(acc, elem(item, 1) + 1, elem(item, 0)) end)
   end
 
   def encrypt_message(message) do
-    # assign shifts to all characters in the message
-    # modulo and do lookup
-    "keder ohulw"
+    String.codepoints(message)
+    |> Enum.with_index()
+    |> Enum.map(&encode_letter/1)
+  end
+
+  def encode_letter(letter_and_index) do
+    # index of letter in message
+    index = elem(letter_and_index, 1)
+    letter = elem(letter_and_index, 0)
+
+    character_index =
+      character_set()
+      |> Enum.find(fn {_, value} -> value == letter end)
+      |> elem(0)
+
+    {_, shift} = get_shift_for_letter(message_list(), index, shifts())
+    encoded_position = rem(character_index + shift, character_set_length())
+    # if character_index + shift == character_set_length.
+    # return the character_index + shift
+    require IEx
+    IEx.pry()
+    Map.get(character_set(), encoded_position)
   end
 
   def get_shift_for_letter(message, letter_index, shifts) do
@@ -64,21 +83,13 @@ defmodule Enigma do
     {Enum.at(message, letter_index), Enum.at(shifts, shift_index)}
   end
 
-  def modulate_shifts(shifts) do
-    Enum.map(shifts, &find_shift_number/1)
+  def shifts do
+    [3, 27, 73, 20]
   end
 
-  def find_shift_number(raw_shift) do
-    if raw_shift == character_set_length() do
-      raw_shift
-    else
-      rem(raw_shift, character_set_length())
-    end
+  def message_list do
+    String.codepoints("hello world")
   end
-
-  # def calculate_shifts do
-  #   [3, 27, 73, 20]
-  # end
 
   # def calculate_keys do
   # end
